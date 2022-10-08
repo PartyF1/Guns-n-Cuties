@@ -1,22 +1,26 @@
-import Phaser, { Physics, Scenes } from "phaser"
-import MainScene from "./config/scenes/mainScene.js";
+import { useEffect } from "react";
 
-export default function Game(props) {
-    const config = {
-        type: Phaser.AUTO,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        physics: {
+import Phaser from "phaser";
+import MainScene from "./config/MainScene";
+
+export default function Game() {
+   useEffect(() => {
+      const config = {
+         type: Phaser.AUTO,
+         width: window.innerWidth,
+         height: window.innerHeight,
+         parent: "game",
+         physics: {
             default: "arcade",
             arcade: {
-                gravite: { y: 300 },
-                debug: true
+               gravity: {y: 400},
+               debug: true,
             }
-        },
-        scene: [MainScene]
-    }
-    new Phaser.Game(config)
-
-    return(<></>)
+         },
+         scene: [MainScene]
+      }
+      new Phaser.Game(config)   
+   });
+   
+   return (<></>);
 }
-
