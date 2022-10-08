@@ -1,7 +1,7 @@
 import Phaser, { Physics, Scenes } from "phaser"
-import mainScene from "./config/scenes/mainScene.js";
+import MainScene from "./config/scenes/mainScene.js";
 
-function Game(props) {
+export default function Game(props) {
     const config = {
         type: Phaser.AUTO,
         width: window.innerWidth,
@@ -13,9 +13,10 @@ function Game(props) {
                 debug: true
             }
         },
-        scene: [mainScene]
+        scene: [MainScene]
     }
     new Phaser.Game(config)
+
+    return(<></>)
 }
 
-export default Game;
