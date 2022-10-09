@@ -24,7 +24,14 @@ export default class MainScene extends Phaser.Scene {
       this.platform = this.physics.add.staticGroup();
       this.platform.create(this.centWidth, this.centHeight, "platform");
 
-      this.coursor = this.input.keyboard.createCursorKeys();
+      this.coursor = this.input.keyboard.addKeys(
+         {  
+         up:Phaser.Input.Keyboard.KeyCodes.SPACE,
+         down:Phaser.Input.Keyboard.KeyCodes.s,
+         left:Phaser.Input.Keyboard.KeyCodes.A,
+         right:Phaser.Input.Keyboard.KeyCodes.D
+      }
+      );
 
       this.player = this.physics.add.sprite(this.centWidth, this.centHeight, "girl");
       this.player.setCollideWorldBounds(true);
@@ -43,9 +50,9 @@ export default class MainScene extends Phaser.Scene {
          this.player.setVelocityX(0);
       }
 
-      if (this.coursor.space.isDown && this.player.body.touching.down) {
+      if (this.coursor.up.isDown && this.player.body.touching.down) {
          this.player.setVelocityY(-500);
-      } else if (this.coursor.space.isDown && this.player.body.touching.up) {
+      } else if (this.coursor.up.isDown && this.player.body.touching.up) {
          this.player.setVelocityY(500);
       }
    }
