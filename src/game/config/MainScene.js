@@ -23,7 +23,7 @@ export default class MainScene extends Phaser.Scene {
       this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 4000, 2250, "city").setScale(this.centWidth / 2000, this.centHeight/1125);
 
       this.ground = this.physics.add.staticGroup()
-      this.ground.create(window.innerWidth / 2, window.innerHeight / 2 + 300, "ground");
+      this.ground.create(this.centWidth, this.centHeight + 300, "ground");
 
       this.platform = this.physics.add.staticGroup();
       this.platform.create(this.centWidth, this.centHeight, "platform");
