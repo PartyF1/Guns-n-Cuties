@@ -1,5 +1,6 @@
 import Server from "./server";
 import { useRef } from "react";
+import "./authorisation.css"
 
 
 
@@ -13,10 +14,12 @@ export default function Authorisation(props) {
     }
 
     return (
-        <div>
-            <input ref={login}></input>
-            <input ref={password}></input>
-            <button onClick={sendLoginHandler}>Войти</button>
+        <div className="login-form">
+            <fieldset>
+            <input ref={login} placeholder={"login"} type={"login"}></input>
+            <input ref={password} placeholder={"password"} type={"password"}></input>
+            <span> <a href="#" onClick={sendLoginHandler}></a></span>
+            </fieldset>
         </div>
     )
 }
