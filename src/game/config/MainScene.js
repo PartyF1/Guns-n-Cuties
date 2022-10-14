@@ -4,9 +4,9 @@ export default class MainScene extends Phaser.Scene {
    constructor() {
       super("mainScene");
 
-      
-      this.centWidth = window.innerWidth/2;
-      this.centHeight = window.innerHeight/2;
+
+      this.centWidth = window.innerWidth / 2;
+      this.centHeight = window.innerHeight / 2;
       this.canJump = true;
       this.count = 0;
    }
@@ -15,29 +15,44 @@ export default class MainScene extends Phaser.Scene {
       this.load.image("sky", 'assets/sky.png');
       this.load.image("ground", 'assets/ground.png');
       this.load.image("platform", 'assets/platform.png');
-      this.load.spritesheet("girl", "assets/New Piskel-3.png.png", {frameWidth: 32, frameHeight: 32})
+      this.load.spritesheet("girl", "assets/New Piskel-3.png.png", { frameWidth: 32, frameHeight: 32 })
+      this.load.spritesheet("anim", "assets/New Piskel (1).png", { frameWidth: 32, frameHeight: 32 });
    }
 
    create() {
-      this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 800, 600, "sky").setScale(this.centWidth/400);
+      this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 800, 600, "sky").setScale(this.centWidth / 400);
 
       this.ground = this.physics.add.staticGroup()
-      this.ground.create(window.innerWidth/2, window.innerHeight/2 + 300, "ground");
+      this.ground.create(window.innerWidth / 2, window.innerHeight / 2 + 300, "ground");
 
       this.platform = this.physics.add.staticGroup();
       this.platform.create(this.centWidth, this.centHeight, "platform");
 
-      this.player = this.physics.add.sprite(this.centWidth, this.centHeight, "girl");
+      this.player = this.physics.add.sprite(this.centWidth, this.centHeight, "girl").setBodySize(23, 25)
       this.player.setScale(2, 2)
 
       this.coursor = this.input.keyboard.addKeys(
-         {  
-         up:Phaser.Input.Keyboard.KeyCodes.SPACE,
-         down:Phaser.Input.Keyboard.KeyCodes.s,
-         left:Phaser.Input.Keyboard.KeyCodes.A,
-         right:Phaser.Input.Keyboard.KeyCodes.D
-      }
+         {
+            up: Phaser.Input.Keyboard.KeyCodes.SPACE,
+            down: Phaser.Input.Keyboard.KeyCodes.s,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            right: Phaser.Input.Keyboard.KeyCodes.D
+         }
       );
+
+      this.anims.create({
+         key: 'run',
+         frames: this.anims.generateFrameNumbers("anim", { start: 0, end: 10 }),
+         frameRate: 30,
+         repeat: -1
+      });
+
+      this.anims.create({
+         key: 'stay',
+         frames: this.anims.generateFrameNumbers("girl"),
+         frameRate: 30,
+         repeat: -1
+      });
 
       this.physics.add.collider(this.player, this.platform);
       this.physics.add.collider(this.player, this.ground);
@@ -47,21 +62,31 @@ export default class MainScene extends Phaser.Scene {
 
    jump(count, canJump) {
       if (count < 2 && canJump) {
-         this.player.setVelocityY(-300);
+         this.player.setVelocityY(-500);
          this.count++;
       }
    }
 
+   run(direction = 1, speed = 160) {
+      this.player.setVelocityX(direction * speed);
+
+      if (direction != 1) this.player.flipX = true;
+      else this.player.flipX = false;
+
+      this.player.anims.play("run", true);
+   }
+
    update() {
-      
+
       if (this.coursor.left.isDown) {
-         this.player.setVelocityX(-160);
+         this.run(-1);
          this.bg.x = this.player.body.x;
       } else if (this.coursor.right.isDown) {
-         this.player.setVelocityX(160);
+         this.run(1);
          this.bg.x = this.player.body.x;
       } else {
          this.player.setVelocityX(0);
+         this.player.anims.play("stay", true);
       }
 
       if (this.coursor.up.isDown) {
