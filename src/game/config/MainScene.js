@@ -5,14 +5,14 @@ export default class MainScene extends Phaser.Scene {
       super("mainScene");
 
 
-      this.centWidth = window.innerWidth / 2;
-      this.centHeight = window.innerHeight / 2;
+      this.centWidth = window.outerWidth / 2;
+      this.centHeight = window.outerHeight / 2;
       this.canJump = true;
       this.count = 0;
    }
 
    preload() {
-      this.load.image("sky", 'assets/sky.png');
+      this.load.image("city", 'assets/City.jpg');
       this.load.image("ground", 'assets/ground.png');
       this.load.image("platform", 'assets/platform.png');
       this.load.spritesheet("girl", "assets/New Piskel-3.png.png", { frameWidth: 32, frameHeight: 32 })
@@ -20,7 +20,7 @@ export default class MainScene extends Phaser.Scene {
    }
 
    create() {
-      this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 800, 600, "sky").setScale(this.centWidth / 400);
+      this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 4000, 2250, "city").setScale(this.centWidth / 2000, this.centHeight/1125);
 
       this.ground = this.physics.add.staticGroup()
       this.ground.create(window.innerWidth / 2, window.innerHeight / 2 + 300, "ground");
@@ -70,40 +70,49 @@ export default class MainScene extends Phaser.Scene {
    run(direction = 1, speed = 160) {
       this.player.setVelocityX(direction * speed);
 
-      if (direction != 1) this.player.flipX = true;
+      if (direction !== 1) this.player.flipX = true;
       else this.player.flipX = false;
 
       this.player.anims.play("run", true);
+   }
+
+   followBGX() {
+      this.bg.x = this.player.body.x;
+   }
+
+   followBGY() {
+      this.bg.y = this.player.body.y;
    }
 
    update() {
 
       if (this.coursor.left.isDown) {
          this.run(-1);
-         this.bg.x = this.player.body.x;
+         this.followBGX()
       } else if (this.coursor.right.isDown) {
          this.run(1);
-         this.bg.x = this.player.body.x;
+         this.followBGX()
       } else {
          this.player.setVelocityX(0);
          this.player.anims.play("stay", true);
+         this.followBGX()
       }
 
       if (this.coursor.up.isDown) {
          this.jump(this.count, this.canJump);
          this.canJump = false;
-         this.bg.y = this.player.body.y
+         this.followBGY()
       } else if (this.coursor.up.isUp) {
          this.canJump = true
          if (this.player.body.touching.down) {
             this.count = 0;
          }
-         this.bg.y = this.player.body.y
+         this.followBGY()
       }
       if (this.coursor.up.isDown && this.player.body.touching.up) {
          this.player.setVelocityY(500);
          this.count = 2;
-         this.bg.y = this.player.body.y
+         this.followBGY()
       }
    }
 }
