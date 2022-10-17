@@ -1,12 +1,10 @@
-import Server from "./server";
 import { useRef } from "react";
 import "./authorisation.css"
 
 
 
 export default function Authorisation(props) {
-    const server = new Server;
-    const { setData } = props;
+    const { setData, server } = props;
     const login = useRef();
     const password = useRef()
     async function sendLoginHandler() {

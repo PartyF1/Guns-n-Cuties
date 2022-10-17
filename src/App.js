@@ -1,20 +1,30 @@
+import { useState } from 'react';
 import Game from './game/Game';
 import Authorisation from './Menu/authorisation';
-import { useState } from 'react';
+import Server from './Menu/server';
 import './App.css';
 
 
-function App() {
+function AppMain({server}) {
   const [data, setData] = useState();
   return (
     <div className="App">
       {
         !data ?
-          <Authorisation setData={(data) => setData(data)}></Authorisation> :
-          <Game></Game>
+          <Authorisation server={server} setData={(data) => setData(data)}/> :
+          <Game server={server}/>
       }
     </div>
   );
+}
+
+function App() {
+  const server = new Server;
+  return (
+    <>
+      <AppMain server={server}/>
+    </>
+  )
 }
 
 export default App;

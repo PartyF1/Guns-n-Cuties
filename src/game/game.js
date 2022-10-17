@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Phaser from "phaser";
 import MainScene from "./config/MainScene";
 
-export default function Game() {
+export default function Game(props) {
    useEffect(() => {
       const config = {
          type: Phaser.AUTO,
