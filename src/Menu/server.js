@@ -5,7 +5,7 @@ export default class Server {
             .map(key => `${key}=${params[key]}`).join('&');
         const result = await fetch(`http://gs/?${query}`);
         const answer = await result.json();
-        return (answer.result === 'ok') ? answer : null;
+        return (answer.result === 'ok') ? answer.data : null;
     }
 
     async login(login, password) {
@@ -18,9 +18,9 @@ export default class Server {
         return null;
     }
 
-    async logout(data) {
-        if (data) {
-            return await this.send({method: "logout", data});
+    async logout() {
+        if (this.token) {
+            return await this.send({method: "logout", token: this.token});
         }
     }
 }

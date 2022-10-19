@@ -10,16 +10,16 @@ function AppMain({server}) {
   return (
     <div className="App">
       {
-        !data ?
-          <Authorisation server={server} setData={(data) => setData(data)}/> :
-          <Game server={server}/>
+        data && data.name ?
+          <Game server={server} setData={(data) => setData(data)}/> :
+          <Authorisation server={server} setData={(data) => setData(data)}/>
       }
     </div>
   );
 }
 
 function App() {
-  const server = new Server;
+  const server = new Server();
   return (
     <>
       <AppMain server={server}/>

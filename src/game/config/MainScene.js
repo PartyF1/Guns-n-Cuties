@@ -107,7 +107,6 @@ export default class MainScene extends Phaser.Scene {
    setBallistic(bullet) {
       if (bullet.dist > 50) {
          bullet.destroy();
-         console.log(this.bullets)
       } else {
          bullet.body.setVelocity(bullet.xs, bullet.ys)
          bullet.dist += 1;
