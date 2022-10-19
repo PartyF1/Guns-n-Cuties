@@ -19,11 +19,11 @@ export default class MainScene extends Phaser.Scene {
       this.load.spritesheet("girl", "assets/New Piskel-3.png.png", { frameWidth: 32, frameHeight: 32 })
       this.load.spritesheet("anim", "assets/New Piskel (1).png", { frameWidth: 32, frameHeight: 32 });
       this.load.image("gun", "assets/deagle.png");
-      this.load.spritesheet("bullet", "assets/bullet.png", {frameWidth: 32, frameHeight: 32});
+      this.load.image("bullet", "assets/bullet.png");
    }
 
    create() {
-      this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 4000, 2250, "city").setScale(this.centWidth / 2000, this.centHeight/1125);
+      this.bg = this.add.tileSprite(this.centWidth, this.centHeight, 4000, 2250, "city").setScale(this.centWidth / 2000, this.centHeight / 1125);
 
       this.gun = this.physics.add.sprite(this.centWidth, this.centHeight - 100, "gun").setScale(0.03);
 
@@ -72,6 +72,7 @@ export default class MainScene extends Phaser.Scene {
       this.camera = this.cameras.main.startFollow(this.player);
    }
 
+   //одиночный прыжок
    jump(count, canJump) {
       if (count < 2 && canJump) {
          this.player.setVelocityY(-500);
@@ -79,6 +80,7 @@ export default class MainScene extends Phaser.Scene {
       }
    }
 
+   //функция изменения координат персонажа и проигрывание соответствующей анимации
    run(direction = 1, speed = 160) {
       this.player.setVelocityX(direction * speed);
       if (direction !== 1) this.player.flipX = true;
@@ -86,11 +88,13 @@ export default class MainScene extends Phaser.Scene {
       this.player.anims.play("run", true);
    }
 
+   //Следование заднего фона за игроком
    followBG() {
       this.bg.x = this.player.body.x;
       this.bg.y = this.player.body.y;
    }
 
+   //Взятие игроком оружия
    takeGun(player, gun) {
       if (player.body.hitTest(gun.x, gun.y) && this.coursor.action.isDown) {
          gun.destroy();
@@ -99,31 +103,44 @@ export default class MainScene extends Phaser.Scene {
       }
    }
 
-
-   setBallistic(bullet) {   
+   //изменение пули в пространстве, либо её уничтожение при наборе предельной дальности
+   setBallistic(bullet) {
       if (bullet.dist > 50) {
-         bullet.destroy(); 
+         bullet.destroy();
+         console.log(this.bullets)
       } else {
          bullet.body.setVelocity(bullet.xs, bullet.ys)
          bullet.dist += 1;
       }
    }
 
+   //создание новой пули от параметра скорости
+   newBullet(speed) {
+      const bullet = this.physics.add.sprite(this.player.body.center.x, this.player.body.center.y, "bullet")
+      bullet.scale = 0.05;
+      bullet.setGravityY(0);
+      this.physics.add.collider(bullet, this.platform)
+      this.physics.add.collider(bullet, this.ground)
+      const vector = new Phaser.Math.Vector2(this.mouse.worldX - this.player.body.center.x, this.mouse.worldY - this.player.body.center.y);
+      bullet.rotation = Math.atan2(vector.y, vector.x);
+      vector.setLength(speed);
+      bullet.xs = vector.x
+      bullet.ys = vector.y
+      bullet.dist = 1;
+      return bullet;
+   }
+
+   //стрельба при нажатии ЛКМ
    fire() {
       if (this.mouse.leftButtonDown() && this.player.canFire && this.player.haveWeapon) {
-         const speed = 500;
-         const bullet = this.physics.add.sprite(this.player.body.x, this.player.body.y, "bullet");
-         const vector = new Phaser.Math.Vector2(this.mouse.x - this.player.body.x, this.mouse.y - this.player.body.y);
-         vector.setLength(speed);
-         bullet.xs = vector.x
-         bullet.ys = vector.y
-         bullet.dist = 1;
-         this.bullets.push(bullet);
+         const speed = 800;
+         this.bullets.push(this.newBullet(speed));
          this.player.canFire = false;
       }
       if (this.mouse.leftButtonReleased()) this.player.canFire = true;
    }
 
+   //Горизонтальное передвижение персонажа
    movement() {
       if (this.coursor.left.isDown) {
          this.run(-1);
@@ -135,6 +152,7 @@ export default class MainScene extends Phaser.Scene {
       }
    }
 
+   //Прыжки
    jumping() {
       if (this.coursor.up.isDown) {
          this.jump(this.count, this.canJump);
@@ -155,11 +173,12 @@ export default class MainScene extends Phaser.Scene {
       }
    }
 
+   //Изменение положения всех пуль в мире
    allBulletsTraectory(bullets) {
       if (bullets.length > 0)
-      bullets.forEach(bullet => {
-         this.setBallistic(bullet);
-      });
+         bullets.forEach(bullet => {
+            this.setBallistic(bullet);
+         });
    }
 
    update() {

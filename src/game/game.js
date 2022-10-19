@@ -4,6 +4,7 @@ import Phaser from "phaser";
 import MainScene from "./config/MainScene";
 
 export default function Game(props) {
+   const server = props;
    useEffect(() => {
       const config = {
          type: Phaser.AUTO,
