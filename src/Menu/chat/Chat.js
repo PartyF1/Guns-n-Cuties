@@ -21,7 +21,7 @@ export default function Chat(props) {
       if (input.current.value) {
          await server.sendMessage(data.name, input.current.value);
          input.current.value = "";
-         setState(!state);
+         setState();
       }
    }
 
