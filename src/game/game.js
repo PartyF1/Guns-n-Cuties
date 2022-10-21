@@ -3,8 +3,8 @@ import Phaser from "phaser";
 import MainScene from "./config/MainScene";
 
 export default function Game(props) {
-   const {server, setData} = props;
-   let game;
+   const {server} = props;
+   //let game;
    useEffect(() => {
       const config = {
          type: Phaser.AUTO,
@@ -20,14 +20,8 @@ export default function Game(props) {
          },
          scene: [MainScene]
       }
-      game = new Phaser.Game(config)   
+      new Phaser.Game(config)  
+      //setState(true); 
    });
-
-   async function logout() {
-      setData(await server.logout())
-      game.destroy(true, false);
-      game = null;
-   }
-   
-   return (<button onClick={logout}>ВОЙТИ</button>);
+   return(<></>)
 }

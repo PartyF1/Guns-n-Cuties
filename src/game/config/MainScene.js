@@ -105,7 +105,7 @@ export default class MainScene extends Phaser.Scene {
 
    //изменение пули в пространстве, либо её уничтожение при наборе предельной дальности
    setBallistic(bullet) {
-      if (bullet.dist > 50) {
+      if ((bullet.dist > 50) && bullet) {
          bullet.destroy();
       } else {
          bullet.body.setVelocity(bullet.xs, bullet.ys)
@@ -177,6 +177,7 @@ export default class MainScene extends Phaser.Scene {
       if (bullets.length > 0)
          bullets.forEach(bullet => {
             this.setBallistic(bullet);
+            console.log(bullets)
          });
    }
 

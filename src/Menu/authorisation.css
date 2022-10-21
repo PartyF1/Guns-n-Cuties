@@ -92,3 +92,8 @@ span a:after {
 span a:hover {
   transform: translateZ(-25px) rotateX(-90deg);
 }
+
+.menu {
+  visibility: visible;
+}
+

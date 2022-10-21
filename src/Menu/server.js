@@ -23,4 +23,12 @@ export default class Server {
             return await this.send({method: "logout", token: this.token});
         }
     }
+
+    async getMessages() {
+        return await this.send({method: "getMessages"})
+    }
+
+    async sendMessage(user, message) {
+        this.send({method: "sendMessage", user, message})
+    }
 }
