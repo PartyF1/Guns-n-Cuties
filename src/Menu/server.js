@@ -28,7 +28,7 @@ export default class Server {
         return await this.send({method: "getMessages"})
     }
 
-    async sendMessage(user, message) {
-        this.send({method: "sendMessage", user, message})
+    async sendMessage(name, message) {
+        return await this.send({method: "sendMessage", name, message})
     }
 }

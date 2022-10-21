@@ -1,20 +1,22 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Message from "./message.js"
 import "./chat.css"
+let messages = [];
 
 export default function Chat(props) {
+   
    const { server, data } = props;
    const [state, setState] = useState();
    const input = useRef();
-   let messages = [];
    async function getMessages() {
       messages = await server.getMessages();
    }
 
-   setInterval(() => {
-      getMessages();
-      setState();
-   }, 1000)
+      setInterval(() => {
+         getMessages();
+         setState(!state);
+      }, 1000)
+   
 
 
    async function sendMessage() {

@@ -2,7 +2,6 @@ import "./chat.css"
 
 export default function Message(props) {
     const { message } = props;
-    console.log(props)
     return (
         <div className="message">
             <div className="name">
